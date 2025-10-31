@@ -2,7 +2,7 @@
 
 ### Full Project Architecture & Flow
 
-![Google Login Flow](src/main/assets/authservice-overview.png)
+![Google Login Flow](assets/authservice-overview.png)
 
 ---
 
@@ -353,12 +353,13 @@ Returns Date object for token expiration: `currentTimeMillis + expirationInMs`
 - `@Component`: Registers the class as a Spring Bean for dependency injection, making it easily accessible in other components like OAuth2 handlers or controllers.
 
 #### Internal Data Structures
+
 **codeTokenMap:**
-- Map<String, String> storing mappings of "<type>:<code>" → token.
+- `Map<String, String>` storing mappings of `"<type>:<code>"` → token.
 - Stores which token corresponds to which authorization code.
 
 **expiryMap:**
-- Map<String, Long> storing the expiry timestamp for each code.
+- `Map<String, Long>` storing the expiry timestamp for each code.
 - Enforces time-limited validity (set to 60 seconds here).
 
 **Both are ConcurrentHashMap:**
