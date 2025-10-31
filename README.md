@@ -2,7 +2,7 @@
 
 ### Full Project Architecture & Flow
 
-![Google Login Flow](assets/authservice-overview.png)
+![Google/Basic/Jwt Auth Loin Flow](src/main/assets/authservice-overview.png)
 
 ---
 
