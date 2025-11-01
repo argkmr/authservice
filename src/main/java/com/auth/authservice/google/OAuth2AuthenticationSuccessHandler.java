@@ -40,7 +40,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Autowired
     private final OAuth2AuthorizedClientService authorizedClientService;
 
-    @Value("${app.redirect.url}")
+    @Value("${app.base.google.redirect.url}")
     private String _redirectUrl;
 
     @Override
@@ -61,25 +61,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                         .createdDate(LocalDate.now())
                         .build()));
 
-        OAuth2AuthorizedClient client =
-                authorizedClientService.loadAuthorizedClient("google", authentication.getName());
-
-
         UserDetails user = userDetailsService.loadUserByUsername(email);
 
         String jwtToken = jwtUtils.generateToken(user);
         String jwtRetrievalCode = UUID.randomUUID().toString();
-        String usernameForGmail = jwtUtils.extractUsername(jwtToken);
         codeStore.saveCode("googleLogin", jwtRetrievalCode, jwtToken);
 
-        String accessToken = client.getAccessToken().getTokenValue();
-        String refreshToken = client.getRefreshToken() != null ? client.getRefreshToken().getTokenValue() : null;
-        String gmailTokensRetrivalCode = UUID.randomUUID().toString();
-        codeStore.saveCode("gmail", gmailTokensRetrivalCode, accessToken+"_&&_"+refreshToken+"_&&_"+usernameForGmail);
-
         String finalRedirectUrl = _redirectUrl
-                .replace("{jwt}", jwtRetrievalCode)
-                .replace("{gmail}", gmailTokensRetrivalCode);
+                .replace("{jwt}", jwtRetrievalCode);
 
         getRedirectStrategy().sendRedirect(request, response, finalRedirectUrl);
     }

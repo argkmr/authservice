@@ -44,6 +44,7 @@ public class GoogleAuthController {
     public ResponseEntity<LoginResponseDto> getGmailTokens(@RequestParam String code){
         try{
             LoginResponseDto tokenInfo = googleAuthService.getGmailTokens(code);
+            System.out.println("TokenInfo:" + tokenInfo);
             if (tokenInfo.getToken() == null) {
                 throw new RuntimeException("Something went wrong.");
             }
